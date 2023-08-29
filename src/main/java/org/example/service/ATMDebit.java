@@ -2,25 +2,22 @@ package org.example.service;
 
 import org.example.model.BankAccount;
 
-public class ATM implements Runnable{
+public class ATMDebit implements Runnable{
     BankAccount bankAccount;
 
-    public ATM(BankAccount bankAccount) {
+    public ATMDebit(BankAccount bankAccount) {
         this.bankAccount = bankAccount;
     }
 
     @Override
     public void run() {
-        double amt = 22;
-
         while (true){
-            bankAccount.topUp(100);
+            bankAccount.debit(5);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
-
     }
 }

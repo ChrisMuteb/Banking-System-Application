@@ -28,4 +28,6 @@ public class BankAccountThreadTest {
 //        System.out.println("Current balance: " + bankAccount.getBalance());
         Assertions.assertEquals(500, bankAccount.getBalance());
     }
+
+
 }

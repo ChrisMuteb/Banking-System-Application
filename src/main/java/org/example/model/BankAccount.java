@@ -7,6 +7,7 @@ public class BankAccount {
     private double overdraft;
     private String cardNumber;
     private boolean isActive;
+    private boolean amountSet;
 
     public BankAccount() {
     }
@@ -20,15 +21,37 @@ public class BankAccount {
         this.accountBalance = balance;
         this.overdraft = overdraft;
         this.isActive = true;
+        amountSet = false;
     }
 
     public synchronized double topUp(double amount){
-        return this.accountBalance += amount;
+        while (amountSet){
+            try {
+                wait();
+            }catch (InterruptedException e){
+                throw new RuntimeException(e);
+            }
+        }
+        amountSet = true;
+        this.accountBalance += amount;
+        System.out.println("Top up: " + amount + " tOTAL AMOUNT " + accountBalance);
+        notify();
+        return accountBalance;
     }
     public synchronized double debit(double amount){
 
+        while (!amountSet){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         if(this.accountBalance - amount > this.overdraft){
             this.accountBalance -= amount;
+            System.out.println("Debit: " + amount + " tOTAL AMOUNT " + accountBalance);
+            amountSet = false;
+            notify();
             return amount;
         }
         else
