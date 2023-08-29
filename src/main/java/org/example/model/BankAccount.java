@@ -22,10 +22,10 @@ public class BankAccount {
         this.isActive = true;
     }
 
-    public double topUp(double amount){
+    public synchronized double topUp(double amount){
         return this.accountBalance += amount;
     }
-    public double debit(double amount){
+    public synchronized double debit(double amount){
 
         if(this.accountBalance - amount > this.overdraft){
             this.accountBalance -= amount;
